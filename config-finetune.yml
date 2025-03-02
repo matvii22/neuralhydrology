@@ -1,0 +1,79 @@
+# Experiment configurations
+experiment_name: finetune_temp_10003
+
+# Required finetuning arguments
+base_run_dir: /Users/matviikotolyk/neuralhydrology/runs/development_run_0103_100120
+finetune_modules:
+  - embedding_net  # To learn new temperature feature representations
+  - head          # To adapt final predictions
+
+# Training period (using a shorter period for finetuning)
+train_start_date: "01/10/1999"
+train_end_date: "30/09/2008"
+validation_start_date: "01/10/1980"
+validation_end_date: "30/09/1989"
+test_start_date: "01/10/1989"
+test_end_date: "30/09/1999"
+
+# Basin selection (only basin 10003)
+train_basin_file: finetune_basins.txt  # File contains just "10003"
+
+# Device configuration
+device: mps
+
+# Validation configuration
+validate_every: 1
+validate_n_random_basins: 1
+metrics:
+  - NSE
+  - KGE
+  - Alpha-NSE
+  - Beta-NSE
+
+# Modified input features including new temperature metrics
+dynamic_inputs:
+  # Original inputs
+  - precipitation
+  - pet
+  - temperature
+  - peti
+  - humidity
+  - shortwave_rad
+  - longwave_rad    # Added for thermal radiation effects
+  - windspeed
+  
+  # Temperature variability metrics
+  - temp_7d_range   # Weekly temperature range
+  - temp_7d_std     # Weekly temperature variability
+  - temp_7d_mean    # Weekly average temperature
+  - temp_seasonal_dev  # Deviation from monthly average
+  
+  # Temperature persistence and cold weather metrics
+  - temp_persistence   # Periods of stable temperature
+  - cold_spell_length  # Duration of cold periods
+  - snow_probability   # Likelihood of snow conditions
+  - melt_potential    # Potential for snow melt
+
+# Static attributes (unchanged from base model)
+static_attributes:
+  - area
+  - elev_mean
+  - dpsbar
+  - sand_perc
+  - silt_perc
+  - clay_perc
+  - porosity_hypres
+  - conductivity_hypres
+  - soil_depth_pelletier
+  - p_mean
+  - pet_mean
+  - aridity
+  - frac_snow
+  - high_prec_freq
+  - low_prec_dur
+
+# Training parameters
+learning_rate:
+  0: 1e-4  # Lower learning rate for finetuning
+batch_size: 256  # Smaller batch size for finetuning
+epochs: 10       # More epochs for finetuning

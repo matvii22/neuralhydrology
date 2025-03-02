@@ -1,0 +1,139 @@
+# --- Experiment configurations --------------------------------------------------------------------
+
+# experiment name, used as folder name
+experiment_name: development_run_temp_metrics
+
+# place to store run directory
+run_dir: /Users/matviikotolyk/neuralhydrology/runs
+
+# files to specify training, validation and test basins
+train_basin_file: ./neuralhydrology/data/basins_train.txt
+validation_basin_file: ./neuralhydrology/data/basins_val.txt
+test_basin_file: ./neuralhydrology/data/basins_test.txt
+
+# training, validation and test time periods
+train_start_date: "01/10/1999"
+train_end_date: "30/09/2008"
+validation_start_date: "01/10/1980"
+validation_end_date: "30/09/1989"
+test_start_date: "01/10/1989"
+test_end_date: "30/09/1999"
+
+# fixed seed for reproducibility
+seed: 123
+
+# device configuration
+device: mps
+
+# --- Validation configuration ---------------------------------------------------------------------
+
+validate_every: 1
+validate_n_random_basins: 4
+metrics:
+  - NSE
+  - KGE
+  - Alpha-NSE
+  - Beta-NSE
+
+# --- Model configuration --------------------------------------------------------------------------
+
+# base model type
+model: customlstm
+head: regression
+
+# Model architecture (unchanged from original)
+hidden_size: 64
+initial_forget_bias: 3
+output_dropout: 0.4
+output_activation: linear
+
+# Embedding networks (unchanged from original)
+statics_embedding:
+  type: fc
+  hiddens:
+    - 30
+    - 20
+    - 64
+  activation: tanh
+  dropout: 0.0
+
+dynamics_embedding:
+  type: fc
+  hiddens:
+    - 30
+    - 20
+    - 64
+  activation: tanh
+  dropout: 0.0
+
+# --- Training configuration -----------------------------------------------------------------------
+
+optimizer: Adam
+loss: MSE
+
+learning_rate:
+  0: 1e-3
+
+batch_size: 512
+epochs: 5
+clip_gradient_norm: 1
+predict_last_n: 1
+seq_length: 365
+num_workers: 10
+log_interval: 25
+log_tensorboard: True
+log_n_figures: 2
+save_weights_every: 1
+
+# --- Data configurations --------------------------------------------------------------------------
+
+dataset: camels_gb
+data_dir: /Users/matviikotolyk/hydrology_data/CAMELS_GB/
+
+# Dynamic inputs including new temperature metrics
+dynamic_inputs:
+  # Original inputs
+  - precipitation
+  - pet
+  - temperature
+  - peti
+  - humidity
+  - shortwave_rad
+  - longwave_rad
+  - windspeed
+  
+  # Temperature variability metrics
+  - temp_7d_range
+  - temp_7d_std
+  - temp_7d_mean
+  - temp_30d_mean
+  - temp_seasonal_dev
+  
+  # Snow-related metrics
+  - snow_probability
+  - melt_potential
+
+# Target variables (unchanged)
+target_variables:
+  - discharge_spec
+
+clip_targets_to_zero:
+  - discharge_spec
+
+# Static attributes (unchanged)
+static_attributes:
+  - area
+  - elev_mean
+  - dpsbar
+  - sand_perc
+  - silt_perc
+  - clay_perc
+  - porosity_hypres
+  - conductivity_hypres
+  - soil_depth_pelletier
+  - p_mean
+  - pet_mean
+  - aridity
+  - frac_snow
+  - high_prec_freq
+  - low_prec_dur 

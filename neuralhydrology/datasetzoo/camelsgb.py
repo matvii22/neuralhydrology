@@ -130,26 +130,38 @@ def load_camels_gb_timeseries(data_dir: Path, basin: str) -> pd.DataFrame:
     Parameters
     ----------
     data_dir : Path
-        Path to the CAMELS GB directory. This folder must contain a folder called 'timeseries' containing the forcing
-        files for each basin as .csv file. The file names have to start with 'CAMELS_GB_hydromet_timeseries'.
+        Path to the CAMELS GB directory. This folder can contain either:
+        1. A 'processed' folder with combined metrics in CSV files named 'CAMELS_GB_temp_metrics_{basin}.csv'
+        2. A 'timeseries' folder containing the original forcing files for each basin as .csv file.
     basin : str
         Basin identifier number as string.
 
     Returns
     -------
     pd.DataFrame
-        Time-indexed DataFrame, containing the time series data (forcings + discharge) data.
+        Time-indexed DataFrame, containing the time series data (forcings + discharge + temperature metrics).
     """
+    # First try to load from processed directory
+    processed_path = data_dir / 'processed'
+    if processed_path.is_dir():
+        processed_file = processed_path / f'CAMELS_GB_temp_metrics_{basin}.csv'
+        if processed_file.exists():
+            df = pd.read_csv(processed_file, sep=',', header=0)
+            df["date"] = pd.to_datetime(df["date"])
+            df = df.set_index("date")
+            return df
+
+    # Fall back to original timeseries directory
     forcing_path = data_dir / 'timeseries'
     if not forcing_path.is_dir():
-        raise OSError(f"{forcing_path} does not exist")
+        raise OSError(f"Neither {processed_path} nor {forcing_path} exist")
 
     files = list(forcing_path.glob('**/CAMELS_GB_hydromet_timeseries*.csv'))
     file_path = [f for f in files if f"_{basin}_" in f.name]
     if file_path:
         file_path = file_path[0]
     else:
-        raise FileNotFoundError(f'No file for Basin {basin} at {file_path}')
+        raise FileNotFoundError(f'No file for Basin {basin} found in either {processed_path} or {forcing_path}')
 
     df = pd.read_csv(file_path, sep=',', header=0, dtype={'date': str})
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
