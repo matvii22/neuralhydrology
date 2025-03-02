@@ -1,24 +1,49 @@
-![#](docs/source/_static/img/neural-hyd-logo-black.png)
+# Neural Hydrology
 
-Python library to train neural networks with a strong focus on hydrological applications.
+A Python library for training neural networks with a focus on hydrological applications. This repository is a fork of the [NeuralHydrology](https://github.com/neuralhydrology/neuralhydrology) project, customized for specific research needs.
 
-This package has been used extensively in research over the last years and was used in various academic publications. 
-The core idea of this package is modularity in all places to allow easy integration of new datasets, new model 
-architectures or any training-related aspects (e.g. loss functions, optimizer, regularization). 
-One of the core concepts of this code base are configuration files, which let anyone train neural networks without
-touching the code itself. The NeuralHydrology package is built on top of the deep learning framework 
-[PyTorch](https://pytorch.org/), since it has proven to be the most flexible and useful for research purposes.
+## Overview
 
-We (the AI for Earth Science group at the Institute for Machine Learning, Johannes Kepler University, Linz, Austria) are using
-this code in our day-to-day research and will continue to integrate our new research findings into this public repository.
+NeuralHydrology is built on top of [PyTorch](https://pytorch.org/) and emphasizes modularity to facilitate:
+- Easy integration of new datasets
+- Implementation of new model architectures
+- Customization of training aspects (loss functions, optimizers, regularization)
+- Configuration-based training without code modification
 
+## Key Features
+
+- **Modular Design**: Easily extend and customize components
+- **Configuration-Driven**: Train models using configuration files without code changes
+- **Research-Focused**: Built for flexibility and experimentation in hydrological applications
+- **PyTorch Foundation**: Leverages PyTorch's powerful deep learning capabilities
+
+## Getting Started
+
+1. Clone this repository
+2. Install dependencies (requirements will be listed)
+3. Configure your experiment using the `config.yml` file
+4. Run training using the provided scripts
+
+## Configuration
+
+The `config.yml` file controls all aspects of model training, including:
+- Data configuration (datasets, inputs, targets)
+- Model architecture and parameters
+- Training settings (batch size, learning rate, etc.)
+- Validation and testing parameters
+
+## Original Project
+
+This repository is based on the original NeuralHydrology project by the AI for Earth Science group at the Institute for Machine Learning, Johannes Kepler University, Linz, Austria.
+
+For the original project:
 - Documentation: [neuralhydrology.readthedocs.io](https://neuralhydrology.readthedocs.io)
 - Research Blog: [neuralhydrology.github.io](https://neuralhydrology.github.io)
-- Bug reports/Feature requests [https://github.com/neuralhydrology/neuralhydrology/issues](https://github.com/neuralhydrology/neuralhydrology/issues)
+- Issues & Features: [GitHub Issues](https://github.com/neuralhydrology/neuralhydrology/issues)
 
-# Cite NeuralHydrology
+## Citation
 
-In case you use NeuralHydrology in your research or work, it would be highly appreciated if you include a reference to our [JOSS paper](https://joss.theoj.org/papers/10.21105/joss.04050#) in any kind of publication.
+If you use this work in your research, please cite the original JOSS paper:
 
 ```bibtex
 @article{kratzert2022joss,
@@ -35,7 +60,7 @@ In case you use NeuralHydrology in your research or work, it would be highly app
 }
 ```
 
-# Contact
-
-For questions or comments regarding the usage of this repository, please use the [discussion section](https://github.com/neuralhydrology/neuralhydrology/discussions) on Github. For bug reports and feature requests, please open an [issue](https://github.com/neuralhydrology/neuralhydrology/issues) on GitHub.
-In special cases, you can also reach out to us by email: neuralhydrology(at)googlegroups.com
+For questions about the original NeuralHydrology project:
+- Use the [discussion section](https://github.com/neuralhydrology/neuralhydrology/discussions)
+- Open an [issue](https://github.com/neuralhydrology/neuralhydrology/issues)
+- Email: neuralhydrology(at)googlegroups.com
